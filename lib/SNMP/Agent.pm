@@ -10,7 +10,7 @@ use NetSNMP::ASN qw(ASN_OCTET_STR);
 sub generic_handler
 {
 
-  # $oid, $suboid and $asn_type are provided by the anonymous callback function
+  # $oid, $suboid_handler and $asn_type are provided by the anonymous callback
   # registered by us, and remaining args come from the NetSNMP::agent module
   my ($root_oid, $suboid_handler, $asn_type, $handler, $registration_info,
     $request_info, $requests)
