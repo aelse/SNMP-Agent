@@ -20,7 +20,7 @@ sub generic_handler
   for ($request = $requests ; $request ; $request = $request->next())
   {
     my $oid = $request->getOID();
-    my $mode = $request->getMode();
+    my $mode = $request_info->getMode();
 
     if ($mode == MODE_GET)
     {
@@ -175,6 +175,31 @@ With the agent running,
   iso.3.6.1.4.1.8072.9999.9999.123.2 = STRING: "two"
 
 =head1 NOTES
+
+=head2 Callbacks
+
+The callback functions specified to handle OID requests are called
+for SNMP sets as well as get requests. The requested OID and the
+request type are passed as arguments to the callback. If the mode
+is MODE_SET_ACTION there is a third argument, the value to be set.
+
+  use NetSNMP::agent qw(MODE_SET_ACTION);
+  my $persistent_val = 0;
+
+  sub do_one
+  {
+    my ($oid, $mode, $value) = @_;
+    if ($mode == MODE_SET_ACTION)
+    {
+      $persistent_val = $value;
+    }
+    else
+    {
+      return $persistent_val;
+    }
+  }
+
+=head2 Caching
 
 No caching of responses is done by BP::SNMP_Agent.  Any results from
 expensive operations should probably be cached for some time in case
