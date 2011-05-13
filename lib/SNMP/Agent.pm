@@ -3,6 +3,7 @@ package SNMP::Agent;
 use warnings;
 use strict;
 
+use Carp qw(croak);
 use NetSNMP::agent (':all');
 use NetSNMP::ASN qw(ASN_OCTET_STR);
 
@@ -100,9 +101,9 @@ sub new
     suboid_map => {},
   };
 
-  die "Invalid agent name" unless ($name     =~ /^\w+$/);
-  die "Invalid root oid"   unless ($root_oid =~ /^[\d\.]+$/);
-  die "Need hash reference to suboid handlers"
+  croak "Invalid agent name" unless ($name     =~ /^\w+$/);
+  croak "Invalid root oid"   unless ($root_oid =~ /^[\d\.]+$/);
+  croak "Need hash reference to suboid handlers"
     unless (ref $suboid_handler_map eq "HASH");
 
   foreach my $suboid (keys %$suboid_handler_map)
@@ -112,8 +113,8 @@ sub new
     $asn_type ||= ASN_OCTET_STR;
 
     my $ref_type = ref $handler;
-    die "Invalid suboid: $suboid" unless ($suboid =~ /^[\d\.]*/);
-    die "Not function reference or scalar for suboid $suboid"
+    croak "Invalid suboid: $suboid" unless ($suboid =~ /^[\d\.]*/);
+    croak "Not function reference or scalar for suboid $suboid"
       unless ($ref_type eq 'CODE' || $ref_type eq 'SCALAR');
 
     $suboid =~ s/^\.//;
