@@ -216,6 +216,11 @@ Please report any bugs or feature requests to C<bug-snmp-agent at rt.cpan.org>, 
 the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=SNMP-Agent>.  I will be notified, and then you'll
 automatically be notified of progress on your bug as I make changes.
 
+=head2 COUNTER64
+
+Strange values are returned for non-zero 64 bit counters. I suspect something in either NetSNMP::agent or communication
+between it and the snmp daemon. From cursory investigation it does not appear to be a simple endian problem. I may wrong.
+
 =head1 SUPPORT
 
 You can find documentation for this module with the perldoc command.
