@@ -19,7 +19,7 @@ sub generic_handler
 
   for ($request = $requests ; $request ; $request = $request->next())
   {
-    my $oid = $request->getOID();
+    my $oid  = $request->getOID();
     my $mode = $request_info->getMode();
 
     if ($mode == MODE_GET)
@@ -73,8 +73,10 @@ sub run($)
     # All suboid handlers are a sub ref.
     if (ref $suboid_handler ne 'CODE')
     {
-      $suboid_handler = ($asn_type == ASN_OCTET_STR) ?
-        sub { return "$suboid_handler" } : sub { return $suboid_handler };
+      $suboid_handler =
+        ($asn_type == ASN_OCTET_STR)
+        ? sub { return "$suboid_handler" }
+        : sub { return $suboid_handler };
     }
 
     $agent->register($self->{name}, $oid,
@@ -101,8 +103,7 @@ sub new
     suboid_map => {},
   };
 
-  croak "Invalid agent name" unless ($name     =~ /^\w+$/);
-  croak "Invalid root oid"   unless ($root_oid =~ /^[\d\.]+$/);
+  croak "Invalid agent name" unless ($name =~ /^\w+$/);
   croak "Need hash reference to suboid handlers"
     unless (ref $suboid_handler_map eq "HASH");
 
@@ -262,4 +263,4 @@ See http://dev.perl.org/licenses/ for more information.
 
 =cut
 
-1; # End of SNMP::Agent
+1;    # End of SNMP::Agent
