@@ -51,7 +51,7 @@ sub generic_handler
   }
 }
 
-sub run($)
+sub run
 {
   my $self = shift;
 
