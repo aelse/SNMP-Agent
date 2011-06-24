@@ -1,0 +1,8 @@
+^MANIFEST.bak$
+^MANIFEST.SKIP$
+^MYMETA.yml$
+^.git
+^create_dist.sh$
+^SNMP-Agent-
+^_build
+.swp$
