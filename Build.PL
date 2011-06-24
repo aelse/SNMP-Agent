@@ -14,6 +14,10 @@ my $builder = Module::Build->new(
     'NetSNMP::agent' => 0,
     'NetSNMP::ASN'   => 0,
   },
+  requires          => {
+    'NetSNMP::agent' => 0,
+    'NetSNMP::ASN'   => 0,
+  },
   add_to_cleanup => ['SNMP-Agent-*'],
 );
 
