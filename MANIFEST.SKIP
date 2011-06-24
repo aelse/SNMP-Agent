@@ -2,7 +2,9 @@
 ^MANIFEST.SKIP$
 ^MYMETA.yml$
 ^.git
-^create_dist.sh$
+^*.sh$
 ^SNMP-Agent-
+^libsnmp-agent-perl
 ^_build
-.swp$
+.*.swp$
+^tmp.*
