@@ -25,4 +25,4 @@ debuild
 cd $curr_dir
 /bin/echo -e "\n\n\n##########\n# Found debian packages:"
 ls *.deb
-/bin/echo -e "\n# Cleanup build directory with: rm -r tmp.$$\n##########"
+/bin/echo -e "\n# Cleanup build directory with: rm -rf tmp.$$\n##########"
