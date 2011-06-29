@@ -13,7 +13,7 @@ use strict;
 
 use Carp qw(croak);
 use NetSNMP::agent (':all');
-use NetSNMP::ASN qw(ASN_OCTET_STR);
+use NetSNMP::ASN qw(ASN_OCTET_STR ASN_NULL);
 
 =head1 VERSION
 
@@ -49,32 +49,40 @@ sub _generic_handler
     my $oid  = $request->getOID();
     my $mode = $request_info->getMode();
 
-    if ($mode == MODE_GET)
+    if ($mode == MODE_GET || $mode == MODE_GETNEXT)
     {
-      my $value = $suboid_handler->($oid, $mode);
-      if (defined($value))
+      if ($mode == MODE_GETNEXT)
       {
-        $request->setValue($asn_type, $value);
+        my $next_oid =
+          ($oid < new NetSNMP::OID($root_oid))
+          ? $root_oid
+          : $self->_get_next_oid($oid);
+
+        # next_oid is undefined if handler was given last oid in subtree
+        if (defined($next_oid))
+        {
+          $oid = new NetSNMP::OID($next_oid);
+          $request->setOID($next_oid);
+        }
+        else
+        {
+          $oid = undef;
+        }
       }
-    }
-    elsif ($mode == MODE_GETNEXT)
-    {
-      my $next_oid =
-        ($oid < new NetSNMP::OID($root_oid))
-        ? $root_oid
-        : $self->_get_next_oid($oid);
 
-      # next oid is defined - process the request with the registered handler
-      if (defined($next_oid))
+      if (defined($oid))
       {
-        $next_oid = new NetSNMP::OID($next_oid);
 
-        # nodes in an OID subtree may have different ASN types
+        # Were not asked to GETNEXT beyond last OID in subtree -
+        # process the request with the registered handler.
+        my $value = $suboid_handler->($oid, $mode);
+
         my $new_asn_type = $self->_get_asn_type($oid);
         $new_asn_type ||= $asn_type;
 
-        $request->setOID($next_oid);
-        $request->setValue($new_asn_type, $suboid_handler->($next_oid, $mode));
+        # Possible that a GET request came for an unhandled OID
+        # (undef value from handler) - don't set a value.
+        $request->setValue($new_asn_type, $value) if (defined($value));
       }
     }
     elsif ($mode == MODE_SET_RESERVE1)
@@ -352,6 +360,9 @@ is MODE_SET_ACTION there is a third argument, the value to be set.
      return $persistent_val;
    }
  }
+
+If asked to provide a value for an OID out of range, the handler
+should return an undefined value.
 
 =head2 OIDs
 
