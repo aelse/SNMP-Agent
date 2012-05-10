@@ -13,7 +13,8 @@ use strict;
 
 use Carp qw(croak);
 use NetSNMP::agent (':all');
-use NetSNMP::ASN qw(ASN_OCTET_STR ASN_BIT_STR ASN_NULL ASN_GAUGE ASN_UNSIGNED ASN_COUNTER ASN_COUNTER64 ASN_TIMETICKS);
+use NetSNMP::ASN
+  qw(ASN_OCTET_STR ASN_BIT_STR ASN_NULL ASN_GAUGE ASN_UNSIGNED ASN_COUNTER ASN_COUNTER64 ASN_TIMETICKS);
 
 =head1 VERSION
 
@@ -80,16 +81,16 @@ sub _generic_handler
         my $new_asn_type = $self->_get_asn_type($oid);
         $new_asn_type ||= $asn_type;
 
-        if($new_asn_type == ASN_UNSIGNED ||
-           $new_asn_type == ASN_COUNTER ||
-           $new_asn_type == ASN_COUNTER64 ||
-           $new_asn_type == ASN_TIMETICKS )
+        if ( $new_asn_type == ASN_UNSIGNED
+          || $new_asn_type == ASN_COUNTER
+          || $new_asn_type == ASN_COUNTER64
+          || $new_asn_type == ASN_TIMETICKS)
         {
           $value = sprintf("%u", $value);
         }
 
-        if($new_asn_type == ASN_OCTET_STR ||
-           $new_asn_type == ASN_BIT_STR )
+        if ( $new_asn_type == ASN_OCTET_STR
+          || $new_asn_type == ASN_BIT_STR)
         {
           $value = sprintf("%s", $value);
         }
