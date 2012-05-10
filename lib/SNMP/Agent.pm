@@ -17,11 +17,11 @@ use NetSNMP::ASN qw(ASN_OCTET_STR ASN_BIT_STR ASN_NULL ASN_GAUGE ASN_UNSIGNED AS
 
 =head1 VERSION
 
-Version 0.05
+Version 0.06
 
 =cut
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 =head1 SYNOPSIS
 
